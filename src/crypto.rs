@@ -7,15 +7,15 @@ fn bit<T: Shr<i32, Output = T> + BitAnd<Output = T> + From<u8>>(x: T, b: i32) ->
 fn stage1(addr: u32, param: u8) -> u16 {
 	let swap = |x: u16, s| if s { x.swap_bytes() } else { x };
 	let part = |b| swap((addr >> (16 * b)) as u16, bit(param, b) != 0);
-	let addr = (0..2).fold(0, |x, b| x ^ part(b)) as u32;
+	let addr = (0..2).fold(0, |x, b| x ^ part(b));
 	let x = ((addr >> 5) & 0xf) * 0x1111;
-	(addr.rotate_right(7) ^ (0x6371 & x)) as u16
+	addr.rotate_right(7) ^ (0x6371 & x)
 }
 
 fn stage2(addr: u32, param: u8) -> u16 {
 	let addr = (addr >> param) & 0x1FFFF;
 	let x = (0..4).fold(0, |x, b| (x << 1) | bit(addr, 1 + b * 4)) * 0x1111;
-	(addr.rotate_right(10) ^ (0x3659 & x)) as u16
+	((addr >> 10) ^ (addr << 7) ^ (0x3659 & x)) as u16
 }
 
 fn stage3(addr: u32, param: u8) -> u32 {
