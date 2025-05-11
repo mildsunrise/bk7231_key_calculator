@@ -14,9 +14,7 @@ Found match at 0x570 with key: 0 0 7cb50721 55000803
 ~~~
 
 Limitations:
-- Occurrences of the string in the first 4 bytes of the image are currently not found.
-- The string must be at least 9 bytes in length (8 is the mathematical minimum, but the tool
-  requires one more to simplify the search optimization).
+- The string must be at least 8 bytes in length (more is recommended).
 - This will not give the exact key in efuse, but an equivalent key. This key causes the cipher
   to behave in the same way for all inputs, so it allows encrypting and decrypting for that device.
 - Although the search algorithm takes any byte sequence, the CLI isn't prepared to receive

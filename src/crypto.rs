@@ -18,11 +18,7 @@ fn stage2(addr: u32, param: u8) -> u16 {
 	(addr.rotate_right(10) ^ (0x3659 & x)) as u16
 }
 
-pub fn stage12(addr: u32, param: u8) -> u32 {
-	((stage1(addr, param) as u32) << 16) | (stage2(addr, param) as u32)
-}
-
-pub fn stage3(addr: u32, param: u8) -> u32 {
+fn stage3(addr: u32, param: u8) -> u32 {
 	let addr = addr.rotate_right(8 * param as u32);
 	let x = ((addr >> 2) & 0xf) * 0x1111_1111;
 	addr.rotate_right(15) ^ (0xE519A4F1 & x)
@@ -34,6 +30,10 @@ pub fn encrypt(addr: u32, selectors: [Option<u8>; 3]) -> u32 {
 	out ^= selectors[1].map_or(0, |sel| (stage2(addr, sel) as u32));
 	out ^= selectors[2].map_or(0, |sel| stage3(addr, sel));
 	out
+}
+
+pub fn keystream(selectors: [Option<u8>; 3], addr: u32) -> impl Iterator<Item = u32> {
+	(addr..).step_by(4).map(move |x| encrypt(x, selectors))
 }
 
 pub fn format_settings_word(selectors: [Option<u8>; 3]) -> u32 {
