@@ -2,10 +2,10 @@
 
 Given an encrypted image (and the base address it is mapped at), this tool searches for a string
 in its *decrypted* contents and, if an occurrence is found, prints the key that decrypts the
-occurrence. Sometimes an occurrence is compatible with multiple keys; multiple searches may
+occurrence. Sometimes the same occurrence is compatible with multiple keys; multiple searches may
 be needed to fully pinpoint the key. Occurrences at very low addresses tend to work well.
 
-The image and base address do *not* include CRC bytes (encrypted/decrypted bytes are contiguous).
+The image and base address must *not* include CRC bytes (encrypted/decrypted bytes are contiguous).
 
 Example:
 ~~~
@@ -40,7 +40,7 @@ As explained in [this introductory gist][intro], of the four 32-bit words that m
 only the first three have the role of "key material". The last one is a "settings bitfield":
 most of its bits are ignored, but a few of them turn the different "stages" on and off, as
 well as select between a whopping 4 configurations for each of the stages. Oh, and one of
-its bits *does* serve as key material (it is joined with the first word).
+its bits *does* serve as key material (it is joined with the second word).
 
 So already, we don't have a 128-bit key, but a 97-bit one.
 
